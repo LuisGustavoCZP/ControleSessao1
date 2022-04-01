@@ -7,9 +7,6 @@ app.use(express.urlencoded({ extended: true}))
 
 app.post("/login", users.login);
 
-app.get("/", (req, res) => 
-{
-    res.sendFile(`${__dirname}/src/login.html`);
-});
+app.get("/", users.main);
 
 app.listen(port, () => {console.log(`O servidor foi iniciado em ${port}`)});

@@ -19,17 +19,32 @@ function create (user)
 
 function login (req, res) 
 {
-    let hasacc = true;
-    console.log(req.body);
-    const nuser = {name:req.body["usuario"], pass:req.body["password"]};
-    let userID = indexOf(nuser);
-    if(userID == -1) 
+    const token = req.body["token"];
+    if(!token) 
     {
-        userID = create(nuser);
-        hasacc = false;
+        let hasacc = true;
+        console.log(req.body);
+        const nuser = {name:req.body["usuario"], pass:req.body["password"]};
+        let userID = indexOf(nuser);
+        if(userID == -1) 
+        {
+            userID = create(nuser);
+            hasacc = false;
+        } //
+        const page = `<form action="" method="post"><input type="hidden" name="token" value="${userID}"/><input type="submit" value="Enviar"/></form>`;
+        res.send(page);
+    } 
+    else 
+    {
+        //console.log(token);
+        const page = `<h2>Bem vindo ${users[token].name}</h2>`;
+        res.send(page);
     }
-    const page = `<h2>Bem vindo${hasacc?" novamente ":""} ${nuser.name}</h2><form><input type="hidden" name="token" value="${userID}"/></form>`;
-    res.send(page);
 }
 
-module.exports = {login, users};
+function main (req, res) 
+{
+    res.sendFile(`${__dirname.replace("modules", "src")}/login.html`);
+}
+
+module.exports = {main, login, users};
