@@ -19,7 +19,7 @@ function create (user)
 
 function login (req, res) 
 {
-    const token = req.body["token"];
+    const token = req.cookies["token"];
     if(!token) 
     {
         let hasacc = true;
@@ -31,10 +31,11 @@ function login (req, res)
             userID = create(nuser);
             hasacc = false;
         } //
-        const page = `<form action="" method="post"><input type="hidden" name="token" value="${userID}"/><input type="submit" value="Enviar"/></form>`;
+        res.cookie('token', `${userID}`, { maxAge: 900000, httpOnly: true });
+        const page = `<form action="" method="post"><input type="submit" value="Enviar"/></form>`;
         res.send(page);
     } 
-    else 
+    else
     {
         //console.log(token);
         const page = `<h2>Bem vindo ${users[token].name}</h2>`;
